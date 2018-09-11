@@ -1034,7 +1034,7 @@ final class BuildPlanTests: XCTestCase {
         )
         XCTAssertNoDiagnostics(diagnostics)
         
-        let result = BuildPlanResult(plan: try BuildPlan(buildParameters: mockBuildParameters(destinationTriple: .windows), graph: graph, diagnostics: diagnostics, fileSystem: fs))
+        let result = BuildPlanResult(plan: try BuildPlan(buildParameters: mockBuildParameters(destinationTriple: Triple.create(arch: .x86_64, os: .Windows)), graph: graph, diagnostics: diagnostics, fileSystem: fs))
         result.checkProductsCount(1)
         result.checkTargetsCount(2)
         
@@ -1256,7 +1256,7 @@ final class BuildPlanTests: XCTestCase {
         }
 
         do {
-            let result = try createResult(for: .x86_64Linux)
+            let result = try createResult(for: Triple.create(arch: .x86_64, os: .Linux))
 
             let dep = try result.target(for: "t1").swiftTarget().compileArguments()
             XCTAssertMatch(dep, [.anySequence, "-DDEP", .end])
@@ -1275,7 +1275,7 @@ final class BuildPlanTests: XCTestCase {
         }
 
         do {
-            let result = try createResult(for: .macOS)
+            let result = try createResult(for: Triple.create(arch: .x86_64, os: .macOS))
 
             let cbar = try result.target(for: "cbar").clangTarget().basicArguments()
             XCTAssertMatch(cbar, [.anySequence, "-DCCC=2", "-I/A/Sources/cbar/Sources/headers", "-I/A/Sources/cbar/Sources/cppheaders", "-Icfoo", "-L", "cbar", "-Icxxfoo", "-L", "cxxbar", .end])
